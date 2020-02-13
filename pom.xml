@@ -17,12 +17,12 @@
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiled</artifactId>
-			<version>8.6.2</version>
+			<version>8.8.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
-			<version>8.6.2</version>
+			<version>8.8.6</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -132,9 +132,9 @@
 			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
-				<version>8.6.2</version>
+				<version>8.8.6</version>
 				<configuration>
-					<widgetsetMode>8.6.2</widgetsetMode>
+					<widgetsetMode>8.8.6</widgetsetMode>
 				</configuration>
 				<executions>
 					<execution>

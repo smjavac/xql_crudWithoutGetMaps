@@ -55,7 +55,7 @@ public class MainLayout extends HorizontalLayout {
             verticalLayout.addComponents(horizontalLayout, grid);
             addComponent(verticalLayout);
             grid.addColumn(Auto::getR_object_id).setCaption("Id");
-            grid.addColumn(Auto::getDss_modele).setCaption("Model");
+            grid.addColumn(Auto::getModel).setCaption("Model");
             grid.addColumn(Auto::getDss_body).setCaption("Body");
 
         } catch (DmException e) {
@@ -77,7 +77,7 @@ public class MainLayout extends HorizontalLayout {
         Button save = new Button("Сохранить");
         save.addClickListener(clickEvent -> {
             binder.forField(modelTipeTxt).withValidator(value -> value.length() > 0, "Поле не должно быть пустым")
-                    .bind(Auto::getDss_modele, Auto::setDss_modele);
+                    .bind(Auto::getModel, Auto::setModel);
 
             binder.forField(bodyTxt)
                     .withValidator(value -> value.length() > 0, "Поле не должно быть пустым")
@@ -120,7 +120,7 @@ public class MainLayout extends HorizontalLayout {
         final VerticalLayout layout2 = new VerticalLayout();
         final TextField modelTxt = new TextField("Марка");
         final TextField bodyTxt = new TextField("Модель");
-        modelTxt.setValue(grid.getSelectedItems().iterator().next().getDss_modele());
+        modelTxt.setValue(grid.getSelectedItems().iterator().next().getModel());
         bodyTxt.setValue(grid.getSelectedItems().iterator().next().getDss_body());
         save.addClickListener(clickEvent -> {
             String model = modelTxt.getValue();

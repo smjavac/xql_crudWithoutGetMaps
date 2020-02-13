@@ -1,34 +1,36 @@
 package ru.said.model;
 
 public class Auto {
-    private String r_object_id;
-    private String dss_modele;
-    private String dss_body;
+    private String id;
+    private String model;
+    private String body;
 
     public Auto() {
     }
 
     public String getR_object_id() {
-        return r_object_id;
+        return id;
     }
 
     public void setR_object_id(String r_object_id) {
-        this.r_object_id = r_object_id;
+        this.id = r_object_id;
     }
 
-    public String getDss_modele() {
-        return dss_modele;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public void setDss_modele(String dss_modele) {
-        this.dss_modele = dss_modele;
+    public String getModel() {
+        return model;
     }
+
+
 
     public String getDss_body() {
-        return dss_body;
+        return body;
     }
 
     public void setDss_body(String dss_body) {
-        this.dss_body = dss_body;
+        this.body = dss_body;
     }
 }
