@@ -6,6 +6,7 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
+import org.vaadin.dialogs.ConfirmDialog;
 import ru.idmt.documino.client.DmConfigureException;
 import ru.idmt.documino.client.DocuminoClient;
 import ru.idmt.documino.client.api.session.IDmSession;
@@ -55,7 +56,7 @@ public class MainLayout extends HorizontalLayout {
             verticalLayout.addComponents(horizontalLayout, grid);
             addComponent(verticalLayout);
             grid.addColumn(Auto::getR_object_id).setCaption("Id");
-            grid.addColumn(Auto::getModel).setCaption("Model");
+            grid.addColumn(Auto::getDss_model).setCaption("Model");
             grid.addColumn(Auto::getDss_body).setCaption("Body");
 
         } catch (DmException e) {
@@ -77,7 +78,7 @@ public class MainLayout extends HorizontalLayout {
         Button save = new Button("Сохранить");
         save.addClickListener(clickEvent -> {
             binder.forField(modelTipeTxt).withValidator(value -> value.length() > 0, "Поле не должно быть пустым")
-                    .bind(Auto::getModel, Auto::setModel);
+                    .bind(Auto::getDss_model, Auto::setDss_model);
 
             binder.forField(bodyTxt)
                     .withValidator(value -> value.length() > 0, "Поле не должно быть пустым")
@@ -102,17 +103,31 @@ public class MainLayout extends HorizontalLayout {
     }
 
     void deleteAuto() {
-        try (IDmSession session = DocuminoClient.get().getDmAdminClient().newSession(new DmLoginInfo(null, null))) {
+ //       try  {
             String xql = String.format("DELETE ddt_auto OBJECTS WHERE r_object_id = '%s'",
                     grid.getSelectionModel().getFirstSelectedItem().get().getR_object_id ());
 
-            automobilesList = AutoService.deleteRow(session, xql);
+                ConfirmDialog.show(UI.getCurrent(),
+                        "Подтверждение",
+                        "Вы уверены, что хотите удалить запись?",
+                        "Да",
+                        "Отмена",
+                        confirmDialog -> {
+                            if (confirmDialog.isConfirmed()) {
+                                try (IDmSession session = DocuminoClient.get().getDmAdminClient().newSession(new DmLoginInfo(null, null))){
+                                    automobilesList = AutoService.deleteRow(session, xql);
+                                    Page.getCurrent().reload();
+                                } catch (Exception ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
+                        });
             LOGGER.debug(xql);
-        } catch (DmException | DmConfigureException | IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        Page.getCurrent().reload();
-        initData2();
+//        } catch (DmException | DmConfigureException | IOException e) {
+//            LOGGER.error(e.getMessage(), e);
+//        }
+ //       Page.getCurrent().reload();
+  //      initData2();
     }
 
     void editAuto() {
@@ -120,8 +135,8 @@ public class MainLayout extends HorizontalLayout {
         final VerticalLayout layout2 = new VerticalLayout();
         final TextField modelTxt = new TextField("Марка");
         final TextField bodyTxt = new TextField("Модель");
-        modelTxt.setValue(grid.getSelectedItems().iterator().next().getModel());
-        bodyTxt.setValue(grid.getSelectedItems().iterator().next().getDss_body());
+        modelTxt.setValue(grid.getSelectedItems().iterator().next().getDss_model());
+        bodyTxt.setValue(grid.getSelectedItems().iterator().next().getDss_model());
         save.addClickListener(clickEvent -> {
             String model = modelTxt.getValue();
             String body = bodyTxt.getValue();
@@ -129,7 +144,7 @@ public class MainLayout extends HorizontalLayout {
                     "UPDATE ddt_auto OBJECTS SET dss_model = '%s' SET dss_body = '%s' WHERE r_object_id = '%s'",
                     model,
                     body,
-                    grid.getSelectionModel().getFirstSelectedItem().get().getR_object_id ());
+                    grid.getSelectionModel().getFirstSelectedItem().get().getR_object_id());
             try (IDmSession session = DocuminoClient.get().getDmAdminClient().newSession(new DmLoginInfo(null, null))) {
                 automobilesList = AutoService.editRow(session, xql);
                 LOGGER.debug(xql);

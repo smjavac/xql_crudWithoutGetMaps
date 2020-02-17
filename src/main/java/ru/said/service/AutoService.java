@@ -38,10 +38,10 @@ public class AutoService {
             for (Auto auto : autoCollection){
                 Auto automobile = new Auto();
                 automobile.setR_object_id(auto.getR_object_id());
-                automobile.setModel(auto.getModel());
+                automobile.setDss_model(auto.getDss_model());
                 automobile.setDss_body(auto.getDss_body());
                 autoList.add(automobile);
-                System.out.println(automobile.getModel());
+                System.out.println(automobile.getDss_model());
             }
 
 

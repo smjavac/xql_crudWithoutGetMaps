@@ -16,11 +16,11 @@ public class Auto {
         this.id = r_object_id;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setDss_model(String dss_model) {
+        this.model = dss_model;
     }
 
-    public String getModel() {
+    public String getDss_model() {
         return model;
     }
 
